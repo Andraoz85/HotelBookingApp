@@ -1,0 +1,43 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Hotel Transylvania</h1>
+    <p>Discover your perfect room.</p>
+</div>
+
+@if (Model.Rooms != null)
+{
+    <div class="row">
+        @foreach (var room in Model.Rooms)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Room @room.RoomNumber</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Floor: @room.Floor</li>
+                            <li class="list-group-item">Type: @room.RoomType</li>
+                            <li class="list-group-item">Price: @room.Price$ per night</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            Availability:
+                            <span class="badge @(room.IsAvailable ? "bg-success" : "bg-secondary")">
+                                @(room.IsAvailable ? "Available" : "Not Available")
+                            </span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No rooms available.</p>
+}

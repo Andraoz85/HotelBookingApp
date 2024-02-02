@@ -1,0 +1,32 @@
+﻿@page
+@model HotelBookingApp.Pages.AvailableRoomsModel
+
+<h2>Available Rooms</h2>
+
+@if (Model.Rooms != null && Model.Rooms.Any())
+{
+    <div class="row">
+        @foreach (var room in Model.Rooms)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Room @room.RoomNumber</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Floor: @room.Floor</li>
+                            <li class="list-group-item">Type: @room.RoomType</li>
+                            <li class="list-group-item">Price: @room.Price$ per night</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-success">Available</small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No available rooms at the moment.</p>
+}
