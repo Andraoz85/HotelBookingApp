@@ -9,45 +9,42 @@ namespace HotelBookingApp.Tests
         [Fact]
         public void GetAllRooms_WhenCalled_ReturnsAllRooms()
         {
-            var result = RoomRepository.GetAllRooms();
+            // Given
+            var room = RoomRepository.GetAllRooms();
 
-            result.Should().NotBeNullOrEmpty();
-            result.Should().HaveCount(12);
+            room.Should().NotBeNullOrEmpty();
+            room.Should().HaveCount(12);
         }
 
         [Fact]
         public void GetAvailableRooms_WhenCalled_ReturnsOnlyAvailableRooms()
         {
-            var result = RoomRepository.GetAvailableRooms();
-            result.Should().OnlyContain(Room => Room.IsAvailable == true);
+            // Given
+            var availableRooms = RoomRepository.GetAvailableRooms();
+
+            // When and Then
+            availableRooms.Should().OnlyContain(Room => Room.IsAvailable == true);
         }
 
         [Fact]
         public void GetSingleRooms_WhenCalled_ReturnsOnlySingleRooms()
         {
-            var result = RoomRepository.GetSingleRooms();
-            result.Should().OnlyContain(Room => Room.RoomType == "Single");
+            var singleRooms = RoomRepository.GetSingleRooms();
+            singleRooms.Should().OnlyContain(Room => Room.RoomType == "Single");
         }
 
         [Fact]
         public void GetDoubleRooms_WhenCalled_ReturnsOnlyDoubleRooms()
         {
-            var result = RoomRepository.GetDoubleRooms();
-            result.Should().OnlyContain(Room => Room.RoomType == "Double");
+            var room = RoomRepository.GetDoubleRooms();
+            room.Should().OnlyContain(Room => Room.RoomType == "Double");
         }
 
         [Fact]
         public void GetSuiteRooms_WhenCalled_ReturnsOnlySuiteRooms()
         {
-            var result = RoomRepository.GetSuiteRooms();
-            result.Should().OnlyContain(Room => Room.RoomType == "Deluxe");
-        }
-
-        [Fact]
-        public void GetPresidentialSuiteRooms_WhenCalled_ReturnsOnlyPresidentialSuiteRooms()
-        {
-            var result = RoomRepository.GetPresidentialSuiteRooms();
-            result.Should().OnlyContain(Room => Room.RoomType == "Presidential Suite");
+            var room = RoomRepository.GetSuiteRooms();
+            room.Should().OnlyContain(Room => Room.RoomType == "Suite");
         }
     }
 }

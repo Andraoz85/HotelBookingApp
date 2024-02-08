@@ -4,40 +4,32 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Hotel Transylvania</h1>
-    <p>Discover your perfect room.</p>
-</div>
+<h1>Find your new favorite holiday getaway! Book a room today!</h1>
 
-@if (Model.Rooms != null)
-{
-    <div class="row">
-        @foreach (var room in Model.Rooms)
-        {
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Room @room.RoomNumber</h5>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Floor: @room.Floor</li>
-                            <li class="list-group-item">Type: @room.RoomType</li>
-                            <li class="list-group-item">Price: @room.Price$ per night</li>
-                        </ul>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">
-                            Availability:
-                            <span class="badge @(room.IsAvailable ? "bg-success" : "bg-secondary")">
-                                @(room.IsAvailable ? "Available" : "Not Available")
-                            </span>
-                        </small>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-}
-else
-{
-    <p>No rooms available.</p>
-}
+<form method="get" class="form-inline">
+    <label for="RoomType" class="mr-2">Room Type:</label>
+    <select asp-for="RoomType" class="form-control mr-2">
+        <option value="">All</option>
+        <option value="Single">Single</option>
+        <option value="Double">Double</option>
+        <option value="Suite">Suite</option>
+    </select>
+
+    <label for="ReservationDate" class="mr-2">Reservation Date:</label>
+    <input type="date" asp-for="StartDate" class="form-control mr-2" />
+    to
+    <input type="date" asp-for="EndDate" class="form-control mr-2" />
+
+    <input type="submit" value="Search available rooms" class="btn btn-primary" />
+</form>
+
+<div>
+    @foreach (var room in Model.Rooms!)
+    {
+        <div>
+            <h2>Room @room.RoomNumber</h2>
+            <p>Type: @room.RoomType</p>
+            <p>Price: @room.Price $ per night</p>
+        </div>
+    }
+</div>

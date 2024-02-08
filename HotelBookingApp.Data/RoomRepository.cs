@@ -1,15 +1,15 @@
 ﻿namespace HotelBookingApp.Data
 {
-    public class RoomRepository
+    public static class RoomRepository
     {
+
         private static List<Room> Rooms { get; set; } =
         [
-            // Dummy data
+            // Dummy data - Static list of rooms
             new()
             {
                 Id = 1,
                 RoomNumber = 101,
-                Floor = 1,
                 IsAvailable = true,
                 Price = 75,
                 RoomType = "Single"
@@ -18,7 +18,6 @@
             {
                 Id = 2,
                 RoomNumber = 102,
-                Floor = 1,
                 IsAvailable = true,
                 Price = 130,
                 RoomType = "Double"
@@ -27,8 +26,7 @@
             {
                 Id = 3,
                 RoomNumber = 103,
-                Floor = 1,
-                IsAvailable = false,
+                IsAvailable = true,
                 Price = 75,
                 RoomType = "Single"
             },
@@ -36,7 +34,6 @@
             {
                 Id = 4,
                 RoomNumber = 104,
-                Floor = 1,
                 IsAvailable = true,
                 Price = 80,
                 RoomType = "Single"
@@ -45,8 +42,7 @@
             {
                 Id = 5,
                 RoomNumber = 201,
-                Floor = 2,
-                IsAvailable = false,
+                IsAvailable = true,
                 Price = 140,
                 RoomType = "Double"
             },
@@ -54,7 +50,6 @@
             {
                 Id = 6,
                 RoomNumber = 202,
-                Floor = 2,
                 IsAvailable = true,
                 Price = 135,
                 RoomType = "Double"
@@ -63,7 +58,6 @@
             {
                 Id = 7,
                 RoomNumber = 203,
-                Floor = 2,
                 IsAvailable = true,
                 Price = 90,
                 RoomType = "Single"
@@ -72,8 +66,7 @@
             {
                 Id = 8,
                 RoomNumber = 204,
-                Floor = 2,
-                IsAvailable = false,
+                IsAvailable = true,
                 Price = 85,
                 RoomType = "Single"
             },
@@ -81,7 +74,6 @@
             {
                 Id = 9,
                 RoomNumber = 301,
-                Floor = 3,
                 IsAvailable = true,
                 Price = 250,
                 RoomType = "Suite"
@@ -90,7 +82,6 @@
             {
                 Id = 10,
                 RoomNumber = 302,
-                Floor = 3,
                 IsAvailable = true,
                 Price = 150,
                 RoomType = "Double"
@@ -99,22 +90,20 @@
             {
                 Id = 11,
                 RoomNumber = 303,
-                Floor = 3,
-                IsAvailable = false,
+                IsAvailable = true,
                 Price = 250,
-                RoomType = "Deluxe"
+                RoomType = "Suite"
             },
             new()
             {
                 Id = 12,
                 RoomNumber = 304,
-                Floor = 3,
                 IsAvailable = true,
                 Price = 400,
-                RoomType = "Presidential Suite"
+                RoomType = "Single"
             },
         ];
-        // public static List<Room> Rooms => rooms;
+
         public static List<Room> GetAllRooms()
         {
             return Rooms;
@@ -138,12 +127,8 @@
 
         public static List<Room> GetSuiteRooms()
         {
-            return Rooms.Where(Room => Room.RoomType == "Deluxe").ToList();
+            return Rooms.Where(Room => Room.RoomType == "Suite").ToList();
         }
 
-        public static List<Room> GetPresidentialSuiteRooms()
-        {
-            return Rooms.Where(Room => Room.RoomType == "Presidential Suite").ToList();
-        }
     }
 }
