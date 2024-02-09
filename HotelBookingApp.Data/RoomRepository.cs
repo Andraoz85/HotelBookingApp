@@ -1,6 +1,4 @@
-﻿
-
-namespace HotelBookingApp.Data
+﻿namespace HotelBookingApp.Data
 {
     public static class RoomRepository
     {
@@ -135,7 +133,7 @@ namespace HotelBookingApp.Data
         {
             return Rooms.Where(Room => Room.RoomType == "Suite").ToList();
         }
-
+        /*
         public static bool IsRoomAvailable(int roomId, DateTime startDate, DateTime endDate)
         {
             // make sure that the start date is before the end date
@@ -156,6 +154,7 @@ namespace HotelBookingApp.Data
             // The room is available if there are no overlapping reservations
             return !overlappingReservation;
         }
+        */
 
         // For testing
         public static void ClearRooms()

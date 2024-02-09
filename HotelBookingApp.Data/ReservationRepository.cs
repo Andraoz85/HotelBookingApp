@@ -44,9 +44,13 @@
         }
 
 
-        public static bool HasReservation(int roomId, DateTime startDate, DateTime endDate)
+        public static bool IsRoomAvailable(int roomId, DateTime startDate, DateTime endDate)
         {
-            return reservations.Any(r => r.RoomId == roomId && !(endDate < r.StartDate || startDate > r.EndDate));
+            return !reservations.Any(r =>
+                r.RoomId == roomId &&
+                startDate < r.EndDate &&
+                endDate > r.StartDate);
+
         }
     }
 }

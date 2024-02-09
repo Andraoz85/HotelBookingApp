@@ -22,25 +22,24 @@ namespace HotelBookingApp.Pages
 
         public void OnGet()
         {
+            bool hasSearched = StartDate.HasValue && EndDate.HasValue;
 
-            Rooms = RoomRepository.GetAllRooms();
-
-            // filter by roomtype if a type is selected
-            if (!string.IsNullOrEmpty(RoomType) && RoomType != "All")
+            if (hasSearched)
             {
-                Rooms = Rooms.Where(r => r.RoomType == RoomType).ToList();
+                Rooms = RoomRepository.GetAllRooms();
+
+                //Filter on room type
+                if (!string.IsNullOrEmpty(RoomType) && RoomType != "All")
+                {
+                    Rooms = Rooms.Where(r => r.RoomType.Equals(RoomType, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+
+                // Filter on availability
+                Rooms = Rooms.Where(r => ReservationRepository.IsRoomAvailable(r.Id, StartDate.Value, EndDate.Value)).ToList();
             }
-
-            // filter by date availablity if dates are selected
-            if (StartDate.HasValue && EndDate.HasValue)
+            else
             {
-                Rooms = Rooms.Where(r => RoomRepository.IsRoomAvailable(r.Id, StartDate.Value, EndDate.Value)).ToList();
-            }
-
-            // update availabilty status for each room
-            foreach (var room in Rooms)
-            {
-                room.IsAvailable = !ReservationRepository.HasReservation(room.Id, StartDate ?? DateTime.MinValue, EndDate ?? DateTime.MaxValue);
+                Rooms = []; // start with an empty list of rooms until the user has searched
             }
         }
         public IActionResult OnPostBookRoom(int roomId, DateTime startDate, DateTime endDate)
@@ -54,7 +53,7 @@ namespace HotelBookingApp.Pages
                     return Page();
                 }
                 // Check if the room is available for the selected dates
-                if (!RoomRepository.IsRoomAvailable(roomId, startDate, endDate))
+                if (!ReservationRepository.IsRoomAvailable(roomId, startDate, endDate))
                 {
                     ModelState.AddModelError("", "The room is not available for the selected dates.");
                     return Page();

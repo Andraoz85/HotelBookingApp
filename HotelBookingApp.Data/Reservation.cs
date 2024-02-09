@@ -5,7 +5,7 @@
 
         public int RoomId { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         public Reservation(int roomId, DateTime startDate, DateTime endDate)
         {

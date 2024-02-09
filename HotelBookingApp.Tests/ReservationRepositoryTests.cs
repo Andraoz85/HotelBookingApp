@@ -79,7 +79,7 @@ namespace HotelBookingApp.Tests
         }
 
         [Fact]
-        public void HasReservation_WhenReservationExists_ShouldReturnTrue()
+        public void IsRoomAvailable_WhenReservationExists_ShouldReturnFalse()
         {
             // Given
             ReservationRepository.ClearReservations();
@@ -89,14 +89,14 @@ namespace HotelBookingApp.Tests
             ReservationRepository.AddReservation(roomId, startDate, endDate);
 
             // When
-            var hasReservation = ReservationRepository.HasReservation(roomId, startDate, endDate);
+            var isAvailable = ReservationRepository.IsRoomAvailable(roomId, startDate, endDate);
 
             // Then
-            hasReservation.Should().BeTrue();
+            isAvailable.Should().BeFalse();
         }
 
         [Fact]
-        public void HasReservation_WhenReservationDoesNotExist_ShouldReturnFalse()
+        public void IsRoomAvailable_WhenReservationDoesNotExist_ShouldReturnFalse()
         {
             // Given
             ReservationRepository.ClearReservations();
@@ -106,10 +106,10 @@ namespace HotelBookingApp.Tests
             // No reservation is added
 
             // When
-            var hasReservation = ReservationRepository.HasReservation(roomId, startDate, endDate);
+            var isAvailable = ReservationRepository.IsRoomAvailable(roomId, startDate, endDate);
 
             // Then
-            hasReservation.Should().BeFalse();
+            isAvailable.Should().BeTrue();
         }
         [Fact]
         public void AddReservation_ForAllreadyBookedRoom_ShouldNotAllowDoubleBooking()
