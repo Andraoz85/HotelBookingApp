@@ -8,7 +8,7 @@ namespace HotelBookingApp.Tests
         public ReservationRepositoryTests()
         {
             // Clear the reservations list before each test
-            ReservationRepository.Reservations.Clear();
+            ReservationRepository.ClearReservations();
         }
 
         [Fact]
@@ -20,13 +20,14 @@ namespace HotelBookingApp.Tests
             var endDate = startDate.AddDays(3);
 
             // When
-            ReservationRepository.AddReservation(roomId, startDate, endDate);
+            var result = ReservationRepository.AddReservation(roomId, startDate, endDate);
 
             // Then
-            var reservation = ReservationRepository.Reservations.Single(r => r.RoomId == roomId);
-            reservation.Should().NotBeNull();
-            reservation.StartDate.Should().Be(startDate);
-            reservation.EndDate.Should().Be(endDate);
+            result.Should().NotBeNull();
+            result.RoomId.Should().Be(roomId);
+            result.StartDate.Should().Be(startDate);
+            result.EndDate.Should().Be(endDate);
+            ReservationRepository.GetAllReservations().Should().ContainSingle();
         }
 
         [Fact]
@@ -36,16 +37,29 @@ namespace HotelBookingApp.Tests
             int roomId = 1;
             var startDate = DateTime.Today.AddDays(10);
             var endDate = startDate.AddDays(3);
-            ReservationRepository.AddReservation(roomId, startDate, endDate);
+            var reservation = ReservationRepository.AddReservation(roomId, startDate, endDate);
 
             // When
             ReservationRepository.CancelReservation(roomId, startDate, endDate);
 
             // Then
-            ReservationRepository.Reservations.Should().NotContain(reservation =>
-            reservation.RoomId == roomId &&
-            reservation.StartDate == startDate &&
-            reservation.EndDate == endDate);
+            ReservationRepository.GetAllReservations().Should().NotContain(reservation);
+        }
+
+        [Fact]
+        public void CancelReservation_WhenReservationDoesNotExist_ShouldThrowException()
+        {
+            // Given
+            int roomId = 1;
+            var startDate = DateTime.Today.AddDays(10);
+            var endDate = startDate.AddDays(3);
+            // No reservation is added
+
+            // When
+            Action act = () => ReservationRepository.CancelReservation(roomId, startDate, endDate);
+
+            // Then
+            act.Should().Throw<InvalidOperationException>().WithMessage("Reservation not found");
         }
 
         [Fact]
@@ -55,16 +69,63 @@ namespace HotelBookingApp.Tests
             int roomId = 1;
             var startDate = DateTime.Today.AddDays(10);
             var endDate = startDate.AddDays(3);
-
-            // Room 1 is already booked for these dates
-            ReservationRepository.Reservations.Add(new Reservation { RoomId = roomId, StartDate = startDate, EndDate = endDate });
+            ReservationRepository.AddReservation(roomId, startDate, endDate);
 
             // When
             Action act = () => ReservationRepository.AddReservation(roomId, startDate.AddDays(1), endDate.AddDays(1));
 
             // Then
-            act.Should().Throw<InvalidOperationException>().WithMessage("*The room is not available for the selected date.*");
+            act.Should().Throw<InvalidOperationException>().WithMessage("The room is not available for the selected date.");
         }
 
+        [Fact]
+        public void HasReservation_WhenReservationExists_ShouldReturnTrue()
+        {
+            // Given
+            ReservationRepository.ClearReservations();
+            int roomId = 1;
+            var startDate = DateTime.Today.AddDays(10);
+            var endDate = startDate.AddDays(3);
+            ReservationRepository.AddReservation(roomId, startDate, endDate);
+
+            // When
+            var hasReservation = ReservationRepository.HasReservation(roomId, startDate, endDate);
+
+            // Then
+            hasReservation.Should().BeTrue();
+        }
+
+        [Fact]
+        public void HasReservation_WhenReservationDoesNotExist_ShouldReturnFalse()
+        {
+            // Given
+            ReservationRepository.ClearReservations();
+            int roomId = 1;
+            var startDate = DateTime.Today.AddDays(10);
+            var endDate = startDate.AddDays(3);
+            // No reservation is added
+
+            // When
+            var hasReservation = ReservationRepository.HasReservation(roomId, startDate, endDate);
+
+            // Then
+            hasReservation.Should().BeFalse();
+        }
+        [Fact]
+        public void AddReservation_ForAllreadyBookedRoom_ShouldNotAllowDoubleBooking()
+        {
+            // Given
+            var roomId = 1;
+            var startDate = DateTime.Today.AddDays(10);
+            var endDate = startDate.AddDays(3);
+            ReservationRepository.AddReservation(roomId, startDate, endDate);
+
+            // When
+            Action doubleBooking = () => ReservationRepository.AddReservation(roomId, startDate.AddDays(1), endDate.AddDays(1));
+
+            // Then
+            doubleBooking.Should().Throw<InvalidOperationException>().WithMessage("The room is not available for the selected date.");
+
+        }
     }
 }

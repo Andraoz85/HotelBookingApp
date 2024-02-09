@@ -4,32 +4,67 @@
     ViewData["Title"] = "Home page";
 }
 
-<h1>Find your new favorite holiday getaway! Book a room today!</h1>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
 
-<form method="get" class="form-inline">
-    <label for="RoomType" class="mr-2">Room Type:</label>
-    <select asp-for="RoomType" class="form-control mr-2">
-        <option value="">All</option>
-        <option value="Single">Single</option>
-        <option value="Double">Double</option>
-        <option value="Suite">Suite</option>
-    </select>
+<div class="container mt-4">
+    <h1 class="display-4 text-center mb-4">Find your new favorite holiday getaway! Book a room today!</h1>
 
-    <label for="ReservationDate" class="mr-2">Reservation Date:</label>
-    <input type="date" asp-for="StartDate" class="form-control mr-2" />
-    to
-    <input type="date" asp-for="EndDate" class="form-control mr-2" />
-
-    <input type="submit" value="Search available rooms" class="btn btn-primary" />
-</form>
-
-<div>
-    @foreach (var room in Model.Rooms!)
-    {
-        <div>
-            <h2>Room @room.RoomNumber</h2>
-            <p>Type: @room.RoomType</p>
-            <p>Price: @room.Price $ per night</p>
+    <form method="get" class="mb-4">
+        <div class="form-row justify-content-center">
+            <div class="col-auto">
+                <label for="RoomType" class="sr-only">Room Type:</label>
+                <select asp-for="RoomType" class="form-control">
+                    <option value="">All</option>
+                    <option value="Single">Single</option>
+                    <option value="Double">Double</option>
+                    <option value="Suite">Suite</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="StartDate" class="sr-only">Start Date:</label>
+                <input type="date" asp-for="StartDate" class="form-control" placeholder="Start Date" />
+            </div>
+            <div class="col-auto">
+                <label for="EndDate" class="sr-only">End Date:</label>
+                <input type="date" asp-for="EndDate" class="form-control" placeholder="End Date" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Search available rooms</button>
+            </div>
         </div>
-    }
+    </form>
+
+
+    <div class="row">
+        @foreach (var room in Model.Rooms!)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Room @room.RoomNumber</h5>
+                        <p class="card-text">Type: @room.RoomType</p>
+                        <p class="card-text">Price: @room.Price $ per night</p>
+                        @if (room.IsAvailable)
+                        {
+                            <form method="post" asp-page-handler="BookRoom">
+                                <input type="hidden" name="RoomId" value="@room.Id" />
+                                <input type="hidden" name="StartDate" value="@Model.StartDate" />
+                                <input type="hidden" name="EndDate" value="@Model.EndDate" />
+                                <button type="submit">Book Room</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <p>Not available</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
