@@ -149,6 +149,8 @@ namespace HotelBookingApp.Tests
             suiteRooms.All(r => r.RoomType == "Suite").Should().BeTrue();
         }
 
+
+
         [Fact]
         public void GetRoomsByPriceRange_WhenCalledWithValidRange_ReturnsRoomsWithinRange()
         {
@@ -168,7 +170,6 @@ namespace HotelBookingApp.Tests
             roomsWithinRange.Should().HaveCount(1);
             roomsWithinRange.All(r => r.Price >= lowPrice && r.Price <= highPrice).Should().BeTrue();
         }
-
 
 
     }

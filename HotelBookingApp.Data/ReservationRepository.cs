@@ -7,9 +7,10 @@
         public static Reservation AddReservation(int roomId, DateTime startDate, DateTime endDate)
         {
             // Check for overlapping reservations
-            if (reservations.Any(r => r.RoomId == roomId &&
-                                      startDate < r.EndDate &&
-                                      endDate > r.StartDate))
+            if (reservations.Any(r =>
+                r.RoomId == roomId &&
+                startDate < r.EndDate &&
+                endDate > r.StartDate))
             {
                 throw new InvalidOperationException("The room is not available for the selected date.");
             }
@@ -21,9 +22,10 @@
 
         public static void CancelReservation(int roomId, DateTime startDate, DateTime endDate)
         {
-            var reservationToRemove = reservations.FirstOrDefault(r => r.RoomId == roomId &&
-                                                                      r.StartDate == startDate &&
-                                                                      r.EndDate == endDate);
+            var reservationToRemove = reservations.FirstOrDefault(r =>
+                r.RoomId == roomId &&
+                r.StartDate == startDate &&
+                r.EndDate == endDate);
 
             if (reservationToRemove != null)
             {
@@ -50,7 +52,6 @@
                 r.RoomId == roomId &&
                 startDate < r.EndDate &&
                 endDate > r.StartDate);
-
         }
     }
 }

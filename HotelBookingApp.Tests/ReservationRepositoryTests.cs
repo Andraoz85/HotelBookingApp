@@ -127,5 +127,22 @@ namespace HotelBookingApp.Tests
             doubleBooking.Should().Throw<InvalidOperationException>().WithMessage("The room is not available for the selected date.");
 
         }
+
+        [Fact]
+        public void AddReservation_WhenStartsOnExistingReservationsEndDate_ShouldSucceed()
+        {
+            // Given
+            int roomId = 1;
+            var existingReservationEndDate = DateTime.Today.AddDays(10);
+            ReservationRepository.AddReservation(roomId, DateTime.Today.AddDays(7), existingReservationEndDate);
+
+            // When
+            Action act = () => ReservationRepository.AddReservation(roomId, existingReservationEndDate, existingReservationEndDate.AddDays(3));
+
+            // Then
+            act.Should().NotThrow<InvalidOperationException>();
+        }
+
+
     }
 }

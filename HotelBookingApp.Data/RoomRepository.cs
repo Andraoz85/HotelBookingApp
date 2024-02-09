@@ -133,28 +133,6 @@
         {
             return Rooms.Where(Room => Room.RoomType == "Suite").ToList();
         }
-        /*
-        public static bool IsRoomAvailable(int roomId, DateTime startDate, DateTime endDate)
-        {
-            // make sure that the start date is before the end date
-            if (startDate >= endDate)
-            {
-                throw new InvalidOperationException("Start date must be before end date!");
-            }
-
-            // Get all reservations to check for overlapping dates
-            var allReservations = ReservationRepository.GetAllReservations();
-
-            // check if the room is available for the selected dates
-            var overlappingReservation = allReservations.Any(r =>
-            r.RoomId == roomId &&
-            r.StartDate < endDate &&
-            r.EndDate > startDate);
-
-            // The room is available if there are no overlapping reservations
-            return !overlappingReservation;
-        }
-        */
 
         // For testing
         public static void ClearRooms()
