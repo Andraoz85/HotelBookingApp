@@ -66,7 +66,7 @@ jobs:
         run: dotnet publish --configuration Release --output ./publish
 
       - name: Deploy TO AZURE
-        uses: azure/webapps-deploy@3.0.0
+        uses: azure/webapps-deploy@2
         with:
           app-name: 'hotel-booking-app-OPA2022'
           publish-profile: ${{ secrets.AZURE_HOTELWEBAPP_PUBLISH_PROFILE }}
