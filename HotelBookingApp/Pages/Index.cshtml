@@ -53,9 +53,11 @@
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body">
+                        <img src="~/images/@(room.ImageFileName)" alt="Room @room.RoomNumber" class="card-img-top">
                         <h5 class="card-title">Room @room.RoomNumber</h5>
                         <p class="card-text">Type: @room.RoomType</p>
                         <p class="card-text">Price: @room.Price $ per night</p>
+                        <p class="card-text">Description: @room.Description</p>
                         @if (room.IsAvailable)
                         {
                             <form method="post" asp-page-handler="BookRoom">
