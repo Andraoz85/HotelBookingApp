@@ -6,6 +6,11 @@
         public static IEnumerable<Reservation> GetAllReservations() => reservations;
         public static Reservation AddReservation(int roomId, DateTime startDate, DateTime endDate)
         {
+            // Check that the end date is after the start date
+            if (endDate < startDate)
+            {
+                throw new ArgumentException("End date must be after start date.");
+            }
             // Check for overlapping reservations
             if (reservations.Any(r =>
                 r.RoomId == roomId &&

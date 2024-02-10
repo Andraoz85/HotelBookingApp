@@ -143,6 +143,20 @@ namespace HotelBookingApp.Tests
             act.Should().NotThrow<InvalidOperationException>();
         }
 
+        [Fact]
+        public void AddReservation_StartDateAfterEndDate_ShouldThrowArgumentException()
+        {
+            // Given
+            ReservationRepository.ClearReservations();
+            int roomId = 1;
+            var startDate = new DateTime(2024, 2, 10);
+            var endDate = new DateTime(2024, 2, 8);
 
+            // When
+            Action act = () => ReservationRepository.AddReservation(roomId, startDate, endDate);
+
+            // Then
+            act.Should().Throw<ArgumentException>().WithMessage("End date must be after start date.");
+        }
     }
 }

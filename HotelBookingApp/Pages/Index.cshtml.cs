@@ -22,24 +22,33 @@ namespace HotelBookingApp.Pages
 
         public void OnGet()
         {
-            bool hasSearched = StartDate.HasValue && EndDate.HasValue;
+            Rooms = [];
 
-            if (hasSearched)
+            bool hasSearched = StartDate.HasValue && EndDate.HasValue;
+            bool validDateRange = EndDate > StartDate;
+
+            if (hasSearched && validDateRange)
             {
-                Rooms = RoomRepository.GetAllRooms();
+                //Rooms = RoomRepository.GetAllRooms();
 
                 //Filter on room type
                 if (!string.IsNullOrEmpty(RoomType) && RoomType != "All")
                 {
-                    Rooms = Rooms.Where(r => r.RoomType.Equals(RoomType, StringComparison.OrdinalIgnoreCase)).ToList();
+                    Rooms = RoomRepository.GetAllRooms()
+                    .Where(r => r.RoomType.Equals(RoomType, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
                 }
-
+                else
+                {
+                    Rooms = RoomRepository.GetAllRooms();
+                }
                 // Filter on availability
                 Rooms = Rooms.Where(r => ReservationRepository.IsRoomAvailable(r.Id, StartDate.Value, EndDate.Value)).ToList();
             }
-            else
+            else if (hasSearched && !validDateRange)
             {
-                Rooms = []; // start with an empty list of rooms until the user has searched
+                // Add error message to be displayed on the page
+                TempData["ErrorMessage"] = "End date must be after start date.";
             }
         }
         public IActionResult OnPostBookRoom(int roomId, DateTime startDate, DateTime endDate)
