@@ -1,5 +1,5 @@
 using FluentAssertions;
-using HotelBookingApp.Data;
+using HotelBookingApp.Logic;
 
 namespace HotelBookingApp.Tests
 {

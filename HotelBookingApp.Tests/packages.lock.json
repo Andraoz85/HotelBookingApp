@@ -1331,7 +1331,7 @@
           "xunit.extensibility.core": "[2.4.2]"
         }
       },
-      "hotelbookingapp.data": {
+      "hotelbookingapp.logic": {
         "type": "Project",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "[2.2.5, )"

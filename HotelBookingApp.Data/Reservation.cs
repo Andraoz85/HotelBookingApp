@@ -1,4 +1,4 @@
-﻿namespace HotelBookingApp.Data
+﻿namespace HotelBookingApp.Logic
 {
     public class Reservation
     {
