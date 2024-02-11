@@ -4,7 +4,8 @@
     {
         private static List<Room> Rooms { get; set; } =
         [
-            // Dummy data - Static list of rooms
+            // Static list of rooms
+            // Images and descriptions are generated with DALL-E to avoid copyright
             new()
             {
                 Id = 1,
@@ -182,15 +183,15 @@
             return Rooms.Where(Room => Room.RoomType == "Suite").ToList();
         }
 
-        // For testing
-        public static void ClearRooms()
-        {
-            Rooms.Clear();
-        }
-
         public static IEnumerable<Room> GetRoomsByPriceRange(int lowPrice, int highPrice)
         {
             return Rooms.Where(r => r.Price >= lowPrice && r.Price <= highPrice).ToList();
+        }
+
+        // For testing purposes
+        public static void ClearRooms()
+        {
+            Rooms.Clear();
         }
     }
 }

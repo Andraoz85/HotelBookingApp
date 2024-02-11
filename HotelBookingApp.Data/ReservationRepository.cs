@@ -42,21 +42,18 @@
             }
         }
 
-
-
-        // Method to clear reservations for testing purposes
-        public static void ClearReservations()
-        {
-            reservations.Clear();
-        }
-
-
         public static bool IsRoomAvailable(int roomId, DateTime startDate, DateTime endDate)
         {
             return !reservations.Any(r =>
                 r.RoomId == roomId &&
                 startDate < r.EndDate &&
                 endDate > r.StartDate);
+        }
+
+        // Method to clear reservations for testing purposes
+        public static void ClearReservations()
+        {
+            reservations.Clear();
         }
     }
 }

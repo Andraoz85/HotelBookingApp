@@ -5,16 +5,11 @@ namespace HotelBookingApp.Tests
 {
     public class ReservationRepositoryTests
     {
-        public ReservationRepositoryTests()
-        {
-            // Clear the reservations list before each test
-            ReservationRepository.ClearReservations();
-        }
-
         [Fact]
         public void AddReservation_WithValidParameters_ShouldAddReservation()
         {
             // Given
+            ReservationRepository.ClearReservations();
             var roomId = 1;
             var startDate = DateTime.Today.AddDays(10);
             var endDate = startDate.AddDays(3);
@@ -34,6 +29,7 @@ namespace HotelBookingApp.Tests
         public void CancelReservation_WhenReservationExists_ShouldRemoveReservation()
         {
             // Given
+            ReservationRepository.ClearReservations();
             int roomId = 1;
             var startDate = DateTime.Today.AddDays(10);
             var endDate = startDate.AddDays(3);
@@ -50,10 +46,10 @@ namespace HotelBookingApp.Tests
         public void CancelReservation_WhenReservationDoesNotExist_ShouldThrowException()
         {
             // Given
+            ReservationRepository.ClearReservations();
             int roomId = 1;
             var startDate = DateTime.Today.AddDays(10);
             var endDate = startDate.AddDays(3);
-            // No reservation is added
 
             // When
             Action act = () => ReservationRepository.CancelReservation(roomId, startDate, endDate);
@@ -66,6 +62,7 @@ namespace HotelBookingApp.Tests
         public void AddReservation_WhenRoomIsNotAvailable_ShouldThrowException()
         {
             // Given
+            ReservationRepository.ClearReservations();
             int roomId = 1;
             var startDate = DateTime.Today.AddDays(10);
             var endDate = startDate.AddDays(3);
@@ -115,16 +112,17 @@ namespace HotelBookingApp.Tests
         public void AddReservation_ForAllreadyBookedRoom_ShouldNotAllowDoubleBooking()
         {
             // Given
+            ReservationRepository.ClearReservations();
             var roomId = 1;
             var startDate = DateTime.Today.AddDays(10);
             var endDate = startDate.AddDays(3);
             ReservationRepository.AddReservation(roomId, startDate, endDate);
 
             // When
-            Action doubleBooking = () => ReservationRepository.AddReservation(roomId, startDate.AddDays(1), endDate.AddDays(1));
+            Action act = () => ReservationRepository.AddReservation(roomId, startDate.AddDays(1), endDate.AddDays(1));
 
             // Then
-            doubleBooking.Should().Throw<InvalidOperationException>().WithMessage("The room is not available for the selected date.");
+            act.Should().Throw<InvalidOperationException>().WithMessage("The room is not available for the selected date.");
 
         }
 
@@ -132,6 +130,7 @@ namespace HotelBookingApp.Tests
         public void AddReservation_WhenStartsOnExistingReservationsEndDate_ShouldSucceed()
         {
             // Given
+            ReservationRepository.ClearReservations();
             int roomId = 1;
             var existingReservationEndDate = DateTime.Today.AddDays(10);
             ReservationRepository.AddReservation(roomId, DateTime.Today.AddDays(7), existingReservationEndDate);
@@ -157,6 +156,27 @@ namespace HotelBookingApp.Tests
 
             // Then
             act.Should().Throw<ArgumentException>().WithMessage("End date must be after start date.");
+        }
+
+        [Fact]
+        public void AddReservation_WhenRoomIsAvailableAfterPreviousReservationEnds_ShouldSucceed()
+        {
+            // Given
+            ReservationRepository.ClearReservations();
+            int roomId = 1;
+            DateTime existingStart = DateTime.Today.AddDays(10);
+            DateTime existingEnd = existingStart.AddDays(5);
+            // Existing reservation from day 10 to 15
+            ReservationRepository.AddReservation(roomId, existingStart, existingEnd);
+
+            DateTime newStart = existingEnd.AddDays(-1); // New reservation starts on day 14
+            DateTime newEnd = newStart.AddDays(6); // New reservation ends on day 20, overlapping on day 14
+
+            // When
+            Action act = () => ReservationRepository.AddReservation(roomId, newStart, newEnd);
+
+            // Then
+            act.Should().Throw<InvalidOperationException>().WithMessage("The room is not available for the selected date.");
         }
     }
 }

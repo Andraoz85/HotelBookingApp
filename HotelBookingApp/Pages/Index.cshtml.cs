@@ -25,12 +25,10 @@ namespace HotelBookingApp.Pages
             Rooms = [];
 
             bool hasSearched = StartDate.HasValue && EndDate.HasValue;
-            bool validDateRange = EndDate > StartDate;
+            bool validDateRange = StartDate.HasValue && EndDate.HasValue && EndDate.Value > StartDate.Value;
 
             if (hasSearched && validDateRange)
             {
-                //Rooms = RoomRepository.GetAllRooms();
-
                 //Filter on room type
                 if (!string.IsNullOrEmpty(RoomType) && RoomType != "All")
                 {
@@ -43,11 +41,14 @@ namespace HotelBookingApp.Pages
                     Rooms = RoomRepository.GetAllRooms();
                 }
                 // Filter on availability
-                Rooms = Rooms.Where(r => ReservationRepository.IsRoomAvailable(r.Id, StartDate.Value, EndDate.Value)).ToList();
+                if (StartDate.HasValue && EndDate.HasValue)
+                {
+                    Rooms = Rooms.Where(r => ReservationRepository.IsRoomAvailable(r.Id, StartDate.Value, EndDate.Value)).ToList();
+                }
             }
             else if (hasSearched && !validDateRange)
             {
-                // Add error message to be displayed on the page
+                // Tempdata to display error message
                 TempData["ErrorMessage"] = "End date must be after start date.";
             }
         }
@@ -77,7 +78,7 @@ namespace HotelBookingApp.Pages
                     Rooms = Rooms.Where(r => r.RoomType == RoomType).ToList();
                 }
 
-                // Use TempData to show a success message after redirecting
+                // TempData to show a success message
                 TempData["Message"] = "Room booked successfully!";
                 return Page();
             }
