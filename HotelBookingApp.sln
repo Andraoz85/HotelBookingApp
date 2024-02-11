@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingApp", "HotelBookingApp\HotelBookingApp.csproj", "{6836FB13-CB5F-4A5C-A105-584FFFEE9F60}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingApp.Data", "HotelBookingApp.Data\HotelBookingApp.Data.csproj", "{5BDFAFDB-074B-404F-B3EB-8A94E4DCCA44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingApp.Logic", "HotelBookingApp.Data\HotelBookingApp.Logic.csproj", "{5BDFAFDB-074B-404F-B3EB-8A94E4DCCA44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingApp.Tests", "HotelBookingApp.Tests\HotelBookingApp.Tests.csproj", "{CA6DE652-9BF6-4787-B258-65FC9E308E51}"
 EndProject
